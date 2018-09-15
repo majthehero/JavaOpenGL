@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+}
+
+import org.gradle.internal.os.OperatingSystem
+
+project.ext.lwjglVersion = "3.2.0"
+project.ext.jomlVersion = "1.9.11"
+
+switch ( OperatingSystem.current() ) {
+	case OperatingSystem.WINDOWS:
+		project.ext.lwjglNatives = "natives-windows"
+		break
+	case OperatingSystem.LINUX:
+		project.ext.lwjglNatives = "natives-linux"
+	break
+	case OperatingSystem.MAC_OS:
+		project.ext.lwjglNatives = "natives-macos"
+		break
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile "org.lwjgl:lwjgl:$lwjglVersion"
+	compile "org.lwjgl:lwjgl-bgfx:$lwjglVersion"
+	compile "org.lwjgl:lwjgl-glfw:$lwjglVersion"
+	compile "org.lwjgl:lwjgl-lmdb:$lwjglVersion"
+	compile "org.lwjgl:lwjgl-nanovg:$lwjglVersion"
+	compile "org.lwjgl:lwjgl-nfd:$lwjglVersion"
+	compile "org.lwjgl:lwjgl-nuklear:$lwjglVersion"
+	compile "org.lwjgl:lwjgl-openal:$lwjglVersion"
+	compile "org.lwjgl:lwjgl-opengl:$lwjglVersion"
+	compile "org.lwjgl:lwjgl-remotery:$lwjglVersion"
+	compile "org.lwjgl:lwjgl:$lwjglVersion:$lwjglNatives"
+	compile "org.lwjgl:lwjgl-bgfx:$lwjglVersion:$lwjglNatives"
+	compile "org.lwjgl:lwjgl-glfw:$lwjglVersion:$lwjglNatives"
+	compile "org.lwjgl:lwjgl-lmdb:$lwjglVersion:$lwjglNatives"
+	compile "org.lwjgl:lwjgl-nanovg:$lwjglVersion:$lwjglNatives"
+	compile "org.lwjgl:lwjgl-nfd:$lwjglVersion:$lwjglNatives"
+	compile "org.lwjgl:lwjgl-nuklear:$lwjglVersion:$lwjglNatives"
+	compile "org.lwjgl:lwjgl-openal:$lwjglVersion:$lwjglNatives"
+	compile "org.lwjgl:lwjgl-opengl:$lwjglVersion:$lwjglNatives"
+	compile "org.lwjgl:lwjgl-remotery:$lwjglVersion:$lwjglNatives"
+	compile "org.joml:joml:${jomlVersion}"
+}
+group 'PGM2'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
