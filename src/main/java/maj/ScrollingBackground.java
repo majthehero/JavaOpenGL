@@ -5,19 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 
-import org.lwjgl.Version;
-import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWVidMode;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.system.MemoryStack;
-
-import java.nio.IntBuffer;
-
-import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
-import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.system.MemoryStack.stackPush;
-import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class ScrollingBackground {
 
@@ -25,12 +13,25 @@ public class ScrollingBackground {
     List<double[]> upperPoints;
     Random rng;
 
+    public double[] color;
+    public double scrollSpeed;
+
     public ScrollingBackground(int horResolution) {
 
         this.horResolution = horResolution;
-        upperPoints = new ArrayList<>(this.horResolution);
-        rng = new Random(123);
+        upperPoints = new ArrayList<>(this.horResolution + 10);
+        rng = new Random();
+        color = new double[]{0.3, 0.6, 0.5};
+        scrollSpeed = 1.0;
 
+    }
+
+    public void setScrollSpeed(double scrollSpeed) {
+        this.scrollSpeed = scrollSpeed;
+    }
+
+    public void setColor(double[] color) {
+        this.color = color;
     }
 
     public void init() {
@@ -56,7 +57,7 @@ public class ScrollingBackground {
     public void render() {
 
         glBegin(GL_TRIANGLE_STRIP);
-        glColor3d(0.3, 0.6, 0.5);
+        glColor3dv(color);
 
         int i = 0;
         for (double[] point : upperPoints) {
@@ -84,7 +85,7 @@ public class ScrollingBackground {
 
         // move all points: 1sec -> 10% of screen -> dX = 0.2
         for (double[] point : upperPoints) {
-            point[0] -= 0.2 * dT;
+            point[0] -= 0.2 * dT * scrollSpeed;
         }
 
         // remove first point if second if off screen, add one the other side
@@ -94,13 +95,48 @@ public class ScrollingBackground {
 
             double[] temp = new double[2];
             temp[0] = 1.2;
-            temp[1] = rng.nextGaussian() * 0.3
-                + upperPoints.get(upperPoints.size() - 1)[1];
+
+            double y = upperPoints.get(upperPoints.size() - 1)[1];
+
+            temp[1] = nextY(y);
 
             upperPoints.add(temp);
         }
 
     }
 
+    private double nextY(double prevY) {
+
+        double nextY = 0.0;
+        double r;
+
+        if (prevY > 0.8) { // make next point lower
+            r = rng.nextDouble() * 0.15;
+            nextY = prevY - r;
+        }
+
+        else if (prevY < -0.8) { // make next point higher
+            r = rng.nextDouble() * 0.05;
+            nextY = prevY + r;
+        }
+
+        else {
+
+            r = rng.nextGaussian() * 0.1;
+
+            if (prevY < -0.4) {
+                r += rng.nextDouble() * 0.03;
+            }
+            if (prevY > 0.4) {
+                r += rng.nextDouble() * -0.03;
+            }
+
+            nextY = prevY + r;
+        }
+
+
+
+        return nextY;
+    }
 
 }

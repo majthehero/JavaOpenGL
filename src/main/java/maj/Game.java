@@ -23,7 +23,9 @@ public class Game {
 
     // game objects
 
-    private ScrollingBackground background;
+    private ScrollingBackground background_back;
+    private ScrollingBackground background_mid;
+    private ScrollingBackground background_front;
 
 
     public void run() {
@@ -101,8 +103,24 @@ public class Game {
 
     private void init_game() {
 
-        background = new ScrollingBackground(100);
-        background.init();
+        double[] frontColor = new double[]{0.5, 0.8, 0.3};
+        double[] midColor = new double[]{0.3, 0.7, 0.5};
+        double[] backColor = new double[]{0.2, 0.6, 0.6};
+
+        background_back = new ScrollingBackground(100);
+        background_back.setColor(backColor);
+        background_back.setScrollSpeed(0.7);
+        background_back.init();
+        
+        background_mid = new ScrollingBackground(100);
+        background_mid.setColor(midColor);
+        background_mid.setScrollSpeed(1.0);
+        background_mid.init();
+        
+        background_front = new ScrollingBackground(100);
+        background_front.setColor(frontColor);
+        background_front.setScrollSpeed(1.3);
+        background_front.init();
 
     }
 
@@ -138,8 +156,13 @@ public class Game {
 
 
             //  render background
-            background.render();
-            background.update(dT);
+            background_back.render();
+            background_mid.render();
+            background_front.render();
+
+            background_back.update(dT);
+            background_mid.update(dT);
+            background_front.update(dT);
 
 
             glfwSwapBuffers(window); // swap the color buffers
