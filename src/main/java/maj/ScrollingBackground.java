@@ -7,17 +7,17 @@ import java.util.Random;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class ScrollingBackground {
+class ScrollingBackground {
 
-    int horResolution;
-    int numPoints;
-    List<double[]> upperPoints;
-    Random rng;
+    private int horResolution;
+    private int numPoints;
+    private List<double[]> upperPoints;
+    private Random rng;
 
-    public double[] color;
-    public double scrollSpeed;
+    private double[] color;
+    private double scrollSpeed;
 
-    public ScrollingBackground(int horResolution) {
+    ScrollingBackground(int horResolution) {
 
         this.horResolution = horResolution;
         this.numPoints = horResolution + 10;
@@ -28,15 +28,15 @@ public class ScrollingBackground {
 
     }
 
-    public void setScrollSpeed(double scrollSpeed) {
+    void setScrollSpeed(double scrollSpeed) {
         this.scrollSpeed = scrollSpeed;
     }
 
-    public void setColor(double[] color) {
+    void setColor(double[] color) {
         this.color = color;
     }
 
-    public void init() {
+    void init() {
 
         // init arrays mem
         for (int i=0; i<numPoints; i++) {
@@ -56,7 +56,7 @@ public class ScrollingBackground {
         }
     }
 
-    public void render() {
+    void render() {
 
         glBegin(GL_TRIANGLE_STRIP);
         glColor3dv(color);
@@ -81,7 +81,7 @@ public class ScrollingBackground {
     }
 
 
-    public void update(double dT) {
+    void update(double dT) {
 
 //        System.out.println("Update. dT: " + dT);
 

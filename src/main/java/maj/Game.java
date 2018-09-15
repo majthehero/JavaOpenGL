@@ -27,6 +27,8 @@ public class Game {
     private ScrollingBackground background_mid;
     private ScrollingBackground background_front;
 
+    private ScrollingFloor floor;
+
 
     public void run() {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
@@ -103,9 +105,10 @@ public class Game {
 
     private void init_game() {
 
-        double[] frontColor = new double[]{0.5, 0.8, 0.3};
-        double[] midColor = new double[]{0.3, 0.7, 0.5};
-        double[] backColor = new double[]{0.2, 0.6, 0.6};
+        // background
+        double[] frontColor = new double[]{0.25, 0.4, 0.15};
+        double[] midColor = new double[]{0.15, 0.35, 0.25};
+        double[] backColor = new double[]{0.1, 0.3, 0.3};
 
         background_back = new ScrollingBackground(100);
         background_back.setColor(backColor);
@@ -121,6 +124,12 @@ public class Game {
         background_front.setColor(frontColor);
         background_front.setScrollSpeed(1.3);
         background_front.init();
+
+        // floor
+        double[] floorColor = new double[]{0.4, 0.6, 0.2};
+        floor = new ScrollingFloor(100);
+        floor.setColor(floorColor);
+        floor.init();
 
     }
 
@@ -155,14 +164,19 @@ public class Game {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
 
-            //  render background
+            //  render
             background_back.render();
             background_mid.render();
             background_front.render();
 
+            floor.render();
+
+            // update
             background_back.update(dT);
             background_mid.update(dT);
             background_front.update(dT);
+
+            floor.update(dT);
 
 
             glfwSwapBuffers(window); // swap the color buffers
