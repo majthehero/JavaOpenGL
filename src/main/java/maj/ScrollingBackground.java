@@ -10,6 +10,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class ScrollingBackground {
 
     int horResolution;
+    int numPoints;
     List<double[]> upperPoints;
     Random rng;
 
@@ -19,7 +20,8 @@ public class ScrollingBackground {
     public ScrollingBackground(int horResolution) {
 
         this.horResolution = horResolution;
-        upperPoints = new ArrayList<>(this.horResolution + 10);
+        this.numPoints = horResolution + 10;
+        upperPoints = new ArrayList<>(this.numPoints);
         rng = new Random();
         color = new double[]{0.3, 0.6, 0.5};
         scrollSpeed = 1.0;
@@ -37,7 +39,7 @@ public class ScrollingBackground {
     public void init() {
 
         // init arrays mem
-        for (int i=0; i<horResolution; i++) {
+        for (int i=0; i<numPoints; i++) {
             upperPoints.add(new double[2]);
         }
 
@@ -83,24 +85,24 @@ public class ScrollingBackground {
 
 //        System.out.println("Update. dT: " + dT);
 
-        // move all points: 1sec -> 10% of screen -> dX = 0.2
-        for (double[] point : upperPoints) {
-            point[0] -= 0.2 * dT * scrollSpeed;
-        }
-
         // remove first point if second if off screen, add one the other side
         if (upperPoints.get(1)[0] < -1.0d) {
 
             upperPoints.remove(0);
 
             double[] temp = new double[2];
-            temp[0] = 1.2;
+            temp[0] = 1 + 2.0 / horResolution;
 
             double y = upperPoints.get(upperPoints.size() - 1)[1];
 
             temp[1] = nextY(y);
 
             upperPoints.add(temp);
+        }
+
+        // move all points: 1sec -> 10% of screen -> dX = 0.2
+        for (double[] point : upperPoints) {
+            point[0] -= 0.2 * dT * scrollSpeed;
         }
 
     }
