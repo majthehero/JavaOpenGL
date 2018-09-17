@@ -24,7 +24,7 @@ public class ScrollingFloor {
 
     private int horResolution;
     private int numPoints;
-    private List<double[]> upperPoints;
+    List<double[]> upperPoints;
     private Random rng;
 
     private double[] color;
@@ -133,7 +133,7 @@ public class ScrollingFloor {
 
     private double nextY(double prevY) {
 
-        double nextY = 0.0;
+        double nextY;
         double r = rng.nextDouble();
 
         // currently generating chasm

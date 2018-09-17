@@ -28,12 +28,12 @@ public class Game {
     private ScrollingBackground background_mid;
     private ScrollingBackground background_front;
 
-    private ScrollingFloor floor;
+    ScrollingFloor floor;
 
     private StaticJumper player;
 
 
-    public void run() {
+    private void run() {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 
         init_opengl();
