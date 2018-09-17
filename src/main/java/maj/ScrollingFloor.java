@@ -76,7 +76,7 @@ public class ScrollingFloor {
             point[0] = x;
             x += 2.0 / horResolution; // openGL screen coords are (-1, 1)
 
-            point[1] = -0.3;
+            point[1] = -0.2;
 
         }
     }

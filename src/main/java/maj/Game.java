@@ -14,12 +14,13 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+
 public class Game {
 
 
     // global state
 
-    private long window;
+    long window;
 
     // game objects
 
@@ -28,6 +29,8 @@ public class Game {
     private ScrollingBackground background_front;
 
     private ScrollingFloor floor;
+
+    private StaticJumper player;
 
 
     public void run() {
@@ -131,6 +134,13 @@ public class Game {
         floor.setColor(floorColor);
         floor.init();
 
+        // player
+        double[] playerColor = new double[]{0.7, 0.1, 0.6};
+        player = new StaticJumper();
+        player.setColor(playerColor);
+        player.setPosition(new double[]{-0.4, 0.0});
+        player.init();
+
     }
 
 
@@ -171,12 +181,16 @@ public class Game {
 
             floor.render();
 
+            player.render();
+
             // update
             background_back.update(dT);
             background_mid.update(dT);
             background_front.update(dT);
 
             floor.update(dT);
+
+            player.update(dT, this);
 
 
             glfwSwapBuffers(window); // swap the color buffers
@@ -190,7 +204,6 @@ public class Game {
 
         }
     }
-
 
 
     public static void main(String[] args)
