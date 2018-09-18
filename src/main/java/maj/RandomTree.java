@@ -67,31 +67,34 @@ class RandomTree {
             blocks.add(new double[]{curr_x, curr_y});
 
             double r = rng.nextDouble();
-            if (r < 0.1) {
+            if (r < 0.15) {
                 // generate left brach
-                generate_branch(i, -1, curr_x, curr_y);
-            } else if (r < 0.2) {
-                generate_branch(i, 1, curr_x, curr_y);
+                generate_branch(i, 0, -1, curr_x, curr_y);
+            } else if (r < 0.3) {
+                generate_branch(i, 0, 1, curr_x, curr_y);
             }
 
         }
 
     }
 
-    private void generate_branch(int curr_h, int dir,
+    private void generate_branch(int curr_h, int curr_w,
+                                 int dir,
                                  double begin_x, double begin_y) {
+
+        if (curr_h > height) return;
 
         double curr_x = begin_x;
         double curr_y = begin_y;
 
 //        System.out.println("Starting branch from: " + curr_x + " : " + curr_y);
 
-        for (int i=0; i < (max_heigth - curr_h) / 3; i++) { // ! TODO ABSOLUTE VALUE CHECK
+        for (int i=0; i + curr_w < (height - curr_h) / 1.6; i++) { // ! TODO ABSOLUTE VALUE CHECK
 
             double r = rng.nextDouble();
 
             // normal straigth branch
-            if (r < 0.6) {
+            if (r < 0.8) {
                 curr_x += dir * 0.03;
             }
 
@@ -104,7 +107,7 @@ class RandomTree {
             else if (r < 0.95) {
                 // this branch down
                 curr_y -= 0.1;
-                generate_branch(curr_h++, dir, curr_x, curr_y + 0.1);
+                generate_branch(curr_h++, curr_w++, dir, curr_x, curr_y + 0.1);
             }
 
             // end
