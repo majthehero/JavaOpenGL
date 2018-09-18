@@ -1,30 +1,7 @@
 package maj;
 
-import maj.Util;
-
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-
-
-import org.lwjgl.Version;
-import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWVidMode;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.system.MemoryStack;
-
-import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import static java.lang.Math.abs;
-import static java.lang.Math.log;
-import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.system.MemoryStack.stackPush;
-import static org.lwjgl.system.MemoryUtil.NULL;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -32,9 +9,7 @@ class RandomTree {
 
     private Random rng;
 
-    private int thickness = 1;
     private int height = 15;
-    private static final int max_heigth = 60;
 
     private double scrollSpeed;
 
@@ -65,7 +40,7 @@ class RandomTree {
 
             double x = x0;
             for (int i=0; i<x; i++) {
-                blocks.add(new double[]{x + i, y});
+                blocks.add(new double[]{(x + i)/10.0, y/10.0 - 1.0});
             }
         }
 
@@ -86,7 +61,6 @@ class RandomTree {
 
             generateBranch(branch_x, branch_y, max_length);
         }
-
     }
 
     private void generateBranch(double x0, double y0, int max_length) {
@@ -111,7 +85,7 @@ class RandomTree {
                 x += 1;
             }
 
-            blocks.add(new double[]{x, y});
+            blocks.add(new double[]{x/10.0, y/10.0 - 1.0});
         }
     }
 
@@ -125,9 +99,14 @@ class RandomTree {
 
     void render() {
 
+        System.out.println("##### FRAME ################################");
+
         glColor3dv(color);
         // render each block
         for (double[] block : blocks) {
+
+            System.out.println("Block: " + block[0] + " : " + block[1]);
+
             double x1 = block[0] - 0.01;
             double x2 = block[0] + 0.01;
             double y1 = block[1] - 0.01;
@@ -156,9 +135,6 @@ class RandomTree {
         this.height = height;
     }
 
-    void setThickness(int thickness) {
-        this.thickness = thickness;
-    }
 
 
 

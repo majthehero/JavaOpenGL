@@ -75,8 +75,8 @@ class StaticJumper {
         glColor3dv(color);
         for (double[] point : points) {
 
-            System.out.println("Point x: " + point[0] + " y: " + point[1]);
-            System.out.println("Position: x: " + position[0] + " y: " + position[1]);
+//            System.out.println("Point x: " + point[0] + " y: " + point[1]);
+//            System.out.println("Position: x: " + position[0] + " y: " + position[1]);
 
             glVertex2d(position[0] + point[0],
                         position[1] + point[1]);

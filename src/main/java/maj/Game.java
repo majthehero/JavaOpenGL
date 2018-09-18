@@ -137,9 +137,10 @@ public class Game {
         floor.init();
 
         // tree
-        double[] treeColor = new double[]{0.4, 0.4, 0.1};
+        double[] treeColor = new double[]{1.0, 0.4, 0.1};
         tree = new RandomTree(1.2);
         tree.setPosition(new double[]{0.0, -0.8});
+        tree.setHeight(20);
         tree.setColor(treeColor);
         tree.generate();
 
