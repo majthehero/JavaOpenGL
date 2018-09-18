@@ -1,5 +1,6 @@
 package maj;
 
+import maj.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Random;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.log;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -48,77 +50,69 @@ class RandomTree {
         rng = new Random();
     }
 
+
     void generate() {
+        int max_heigth = height;
+        double x0 = position[0];
+        double y0 = position[1];
 
-        // explore a random tree structure and put blocks
+        // make tree trunk
+        double y = y0;
+        for ( ; y<max_heigth; y++) {
 
-        double[] begin = position.clone();
+            int width = (int)((max_heigth - y) / 10);
+            if (width < 2) width = 2;
 
-        for (int i=0; i < height; i++) {
-
-            double curr_x = begin[0];
-            double curr_y = begin[1] + 0.1 * i;
-
-            System.out.println("Tree block: " + curr_x + " : " + curr_y);
-            System.out.println("Tree block: " + i);
-
-
-            // add block
-            blocks.add(new double[]{curr_x, curr_y});
-
-            double r = rng.nextDouble();
-            if (r < 0.15) {
-                // generate left brach
-                generate_branch(i, 0, -1, curr_x, curr_y);
-            } else if (r < 0.3) {
-                generate_branch(i, 0, 1, curr_x, curr_y);
+            double x = x0;
+            for (int i=0; i<x; i++) {
+                blocks.add(new double[]{x + i, y});
             }
+        }
 
+        // make tree branches
+        y = y0;
+        int k = 2;
+        int num_branches = (int)( Util.log2((int)(max_heigth/3)));
+
+        for (int i=0; i<num_branches; i++) {
+
+            y += (int)(max_heigth / k);
+            k *= 2;
+
+            double branch_x = x0;
+            double branch_y = (int)( y + (rng.nextDouble() * (y/4)) - (y/8));
+
+            int max_length = (int)(max_heigth - branch_y + rng.nextDouble() * (y/4) - (y/8));
+
+            generateBranch(branch_x, branch_y, max_length);
         }
 
     }
 
-    private void generate_branch(int curr_h, int curr_w,
-                                 int dir,
-                                 double begin_x, double begin_y) {
+    private void generateBranch(double x0, double y0, int max_length) {
 
-        if (curr_h > height) return;
+        int steps = 0;
+        int max_steps = (int)(Util.log2(max_length) / 3);
 
-        double curr_x = begin_x;
-        double curr_y = begin_y;
+        double x = x0;
+        double y = y0;
+        for (int i=0; i<max_length; i++) {
 
-//        System.out.println("Starting branch from: " + curr_x + " : " + curr_y);
-
-        for (int i=0; i + curr_w < (height - curr_h) / 1.6; i++) { // ! TODO ABSOLUTE VALUE CHECK
-
-            double r = rng.nextDouble();
-
-            // normal straigth branch
-            if (r < 0.8) {
-                curr_x += dir * 0.03;
+            if (max_length * 0.2 < max_length - i &&
+                max_length - i < max_length * 0.8 &&
+                steps < max_steps)
+            {
+                if (rng.nextDouble() < (max_length / (steps + 1))) {
+                    y++;
+                    steps++;
+                }
             }
-
-            // move up
-            else if (r < 0.9) {
-                curr_y += 0.1;
-            }
-
-            // branch
-            else if (r < 0.95) {
-                // this branch down
-                curr_y -= 0.1;
-                generate_branch(curr_h++, curr_w++, dir, curr_x, curr_y + 0.1);
-            }
-
-            // end
             else {
-                return;
+                x += 1;
             }
 
-            blocks.add(new double[]{curr_x, curr_y});
-
+            blocks.add(new double[]{x, y});
         }
-
     }
 
 
@@ -134,10 +128,10 @@ class RandomTree {
         glColor3dv(color);
         // render each block
         for (double[] block : blocks) {
-            double x1 = block[0] - 0.025;
-            double x2 = block[0] + 0.025;
-            double y1 = block[1] - 0.04;
-            double y2 = block[1] + 0.04;
+            double x1 = block[0] - 0.01;
+            double x2 = block[0] + 0.01;
+            double y1 = block[1] - 0.01;
+            double y2 = block[1] + 0.01;
 
             glBegin(GL_QUADS);
 
