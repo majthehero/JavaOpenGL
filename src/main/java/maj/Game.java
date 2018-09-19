@@ -30,8 +30,6 @@ public class Game {
 
     ScrollingFloor floor;
 
-    RandomTree tree;
-
     private StaticJumper player;
 
 
@@ -136,14 +134,6 @@ public class Game {
         floor.setColor(floorColor);
         floor.init();
 
-        // tree
-        double[] treeColor = new double[]{1.0, 0.4, 0.1};
-        tree = new RandomTree(1.2);
-        tree.setPosition(new double[]{0.0, -0.8});
-        tree.setHeight(20);
-        tree.setColor(treeColor);
-        tree.generate();
-
         // player
         double[] playerColor = new double[]{0.7, 0.1, 0.6};
         player = new StaticJumper();
@@ -191,8 +181,6 @@ public class Game {
 
             floor.render();
 
-            tree.render();
-
             player.render();
 
             // update
@@ -201,8 +189,6 @@ public class Game {
             background_front.update(dT);
 
             floor.update(dT);
-
-            tree.update(dT);
 
             player.update(dT, this);
 
